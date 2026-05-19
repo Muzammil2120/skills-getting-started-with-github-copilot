@@ -21,23 +21,68 @@ app.mount("/static", StaticFiles(directory=os.path.join(Path(__file__).parent,
 
 # In-memory activity database
 activities = {
-    "Chess Club": {
+    "chess-club": {
+        "name": "Chess Club",
         "description": "Learn strategies and compete in chess tournaments",
         "schedule": "Fridays, 3:30 PM - 5:00 PM",
         "max_participants": 12,
         "participants": ["michael@mergington.edu", "daniel@mergington.edu"]
     },
-    "Programming Class": {
+    "programming-class": {
+        "name": "Programming Class",
         "description": "Learn programming fundamentals and build software projects",
         "schedule": "Tuesdays and Thursdays, 3:30 PM - 4:30 PM",
         "max_participants": 20,
         "participants": ["emma@mergington.edu", "sophia@mergington.edu"]
     },
-    "Gym Class": {
+    "gym-class": {
+        "name": "Gym Class",
         "description": "Physical education and sports activities",
         "schedule": "Mondays, Wednesdays, Fridays, 2:00 PM - 3:00 PM",
         "max_participants": 30,
         "participants": ["john@mergington.edu", "olivia@mergington.edu"]
+    },
+    "soccer-team": {
+        "name": "Soccer Team",
+        "description": "Competitive soccer team practice and matches",
+        "schedule": "Mondays, Wednesdays, Fridays, 4:00 PM - 6:00 PM",
+        "max_participants": 25,
+        "participants": ["alex@mergington.edu", "lina@mergington.edu"]
+    },
+    "basketball-club": {
+        "name": "Basketball Club",
+        "description": "Pickup games, drills, and intramural play",
+        "schedule": "Tuesdays and Thursdays, 5:00 PM - 7:00 PM",
+        "max_participants": 15,
+        "participants": ["noah@mergington.edu", "ari@mergington.edu"]
+    },
+    "art-club": {
+        "name": "Art Club",
+        "description": "Studio time, techniques, and gallery projects",
+        "schedule": "Wednesdays, 3:30 PM - 5:00 PM",
+        "max_participants": 20,
+        "participants": ["maya@mergington.edu", "leo@mergington.edu"]
+    },
+    "drama-club": {
+        "name": "Drama Club",
+        "description": "Acting workshops, rehearsals, and school productions",
+        "schedule": "Thursdays, 4:00 PM - 6:00 PM",
+        "max_participants": 30,
+        "participants": ["isabella@mergington.edu", "jack@mergington.edu"]
+    },
+    "debate-team": {
+        "name": "Debate Team",
+        "description": "Prepare for tournaments, public speaking, and research",
+        "schedule": "Tuesdays, 4:00 PM - 6:00 PM",
+        "max_participants": 18,
+        "participants": ["hannah@mergington.edu", "sam@mergington.edu"]
+    },
+    "robotics-club": {
+        "name": "Robotics Club",
+        "description": "Design, build, and program robots for competitions",
+        "schedule": "Mondays and Thursdays, 3:30 PM - 5:30 PM",
+        "max_participants": 12,
+        "participants": ["eli@mergington.edu", "zoe@mergington.edu"]
     }
 }
 
@@ -61,6 +106,14 @@ def signup_for_activity(activity_name: str, email: str):
 
     # Get the specific activity
     activity = activities[activity_name]
+
+   # Validate student is not already signed up
+    if email in activity["participants"]:
+        raise HTTPException(status_code=400, detail="Student already signed up")
+
+    # Optional: check capacity
+    if len(activity["participants"]) >= activity["max_participants"]:
+        raise HTTPException(status_code=400, detail="Activity is full")
 
     # Add student
     activity["participants"].append(email)
